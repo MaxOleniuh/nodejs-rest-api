@@ -12,7 +12,10 @@ const {
   validatePutContact,
   validatePatchContact,
 } = require("../../models/validateContacts");
-const { contactSchema } = require("../../models/contactsSchema");
+const {
+  contactSchema,
+  contactPatchSchema,
+} = require("../../models/contactsSchema");
 
 const router = express.Router();
 
@@ -28,7 +31,7 @@ router.put("/:contactId", validatePutContact(contactSchema), updateContact);
 
 router.patch(
   "/:contactId/favorite",
-  validatePatchContact(contactSchema),
+  validatePatchContact(contactPatchSchema),
   updateStatusContact
 );
 

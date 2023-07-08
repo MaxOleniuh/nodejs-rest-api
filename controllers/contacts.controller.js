@@ -1,5 +1,4 @@
 const { Contact } = require("../models/contact");
-
 const listContacts = async (req, res) => {
   try {
     const contacts = await Contact.find();
@@ -19,8 +18,7 @@ const getContactById = async (req, res) => {
     }
     res.status(200).json(contact);
   } catch (error) {
-    console.error("Error retrieving contact:", error);
-    res.status(500).json({ error: "Server error" });
+    console.log(error);
   }
 };
 const removeContact = async (req, res) => {
@@ -73,8 +71,8 @@ const updateStatusContact = async (req, res) => {
       { favorite },
       { new: true }
     );
-    if (!req.body) {
-      return res.status(400).json({ message: "Missing field favorite" });
+    if (!Object.hasOwnProperty.call(req.body, "favorite")) {
+      return res.status(400).json({ message: "missing field favorite" });
     }
     res.status(200).json(updatedContact);
   } catch (error) {
