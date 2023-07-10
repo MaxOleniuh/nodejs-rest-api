@@ -35,15 +35,12 @@ const validatePutContact = (schema) => {
 const validatePatchContact = (schema) => {
   const middleware = (req, res, next) => {
     if (Object.keys(req.body).length === 0) {
-      res.status(400).json({ message: "missing fields" });
+      res.status(400).json({ message: "missing field favorite" });
       return;
     } else {
       const { error } = schema.validate(req.body);
       if (error) {
-        const missingField = error.details[0].context.label;
-        res
-          .status(400)
-          .json({ message: `Missing required '${missingField}' field` });
+        res.status(400).json({ message: `Not found` });
         return;
       }
     }

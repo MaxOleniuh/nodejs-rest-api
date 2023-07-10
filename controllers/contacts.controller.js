@@ -12,13 +12,9 @@ const getContactById = async (req, res) => {
   try {
     const { id } = req.params;
     const contact = await Contact.findById(id);
-    if (!contact) {
-      res.status(404).json({ message: "Not found" });
-      return;
-    }
     res.status(200).json(contact);
   } catch (error) {
-    console.log(error);
+    res.status(404).json({ message: "Not found" });
   }
 };
 const removeContact = async (req, res) => {
