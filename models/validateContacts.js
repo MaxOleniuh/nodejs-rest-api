@@ -40,7 +40,7 @@ const validatePatchContact = (schema) => {
     } else {
       const { error } = schema.validate(req.body);
       if (error) {
-        res.status(400).json({ message: `Not found` });
+        res.status(400).json({ message: error.message });
         return;
       }
     }

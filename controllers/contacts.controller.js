@@ -12,7 +12,12 @@ const getContactById = async (req, res) => {
   try {
     const { id } = req.params;
     const contact = await Contact.findById(id);
-    res.status(200).json(contact);
+    if (!contact) {
+      res.status(404).json({ message: "Not found" });
+    }
+    if (id !== -1) {
+      res.status(200).json(contact);
+    }
   } catch (error) {
     res.status(404).json({ message: "Not found" });
   }
@@ -22,15 +27,14 @@ const removeContact = async (req, res) => {
     const { contactId } = req.params;
     const removedContact = await Contact.findByIdAndRemove(contactId);
     if (!removedContact) {
-      res.status(404).json({ message: "Not found" });
-      return;
+      return res.status(404).json({ message: "Not found" });
     }
     res.status(200).json({ message: "Contact deleted" });
   } catch (error) {
-    console.error("Error deleting contact:", error);
-    res.status(500).json({ error: "Server error" });
+    return res.status(404).json({ message: "Not found" });
   }
 };
+
 const addContact = async (req, res) => {
   try {
     const newContact = await Contact.create(req.body);

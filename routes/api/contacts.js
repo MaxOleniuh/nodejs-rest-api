@@ -16,18 +16,24 @@ const {
   contactSchema,
   contactPatchSchema,
 } = require("../../models/contactsSchema");
+const checkValidId = require("../../middleware/checkValidId");
 
 const router = express.Router();
 
 router.get("/", listContacts);
 
-router.get(`/:id`, getContactById);
+router.get(`/:id`, checkValidId, getContactById);
 
 router.post("/", validatePostContact(contactSchema), addContact);
 
 router.delete("/:contactId", removeContact);
 
-router.put("/:contactId", validatePutContact(contactSchema), updateContact);
+router.put(
+  "/:contactId",
+  checkValidId,
+  validatePutContact(contactSchema),
+  updateContact
+);
 
 router.patch(
   "/:contactId/favorite",
