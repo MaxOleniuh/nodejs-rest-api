@@ -9,6 +9,20 @@ const validatePostContact = (schema) => {
         .json({ message: `Missing required '${missingField}' field` });
       return;
     }
+    next();
+  };
+  return middleware;
+};
+const validateRegister = (schema) => {
+  const middleware = async (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      const missingField = error.details[0].context.label;
+      res
+        .status(400)
+        .json({ message: `Missing required '${missingField}' field` });
+      return;
+    }
     const emailExists = await User.exists({ email: req.body.email });
     if (emailExists) {
       res.status(409).json({ message: "Email in use" });
@@ -59,4 +73,5 @@ module.exports = {
   validatePostContact,
   validatePutContact,
   validatePatchContact,
+  validateRegister,
 };
