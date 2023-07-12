@@ -16,6 +16,11 @@ const contactSchemaMongoose = new Schema(
       type: Boolean,
       default: false,
     },
+    id: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { toJSON: { versionKey: false } }
 );
