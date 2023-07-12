@@ -23,20 +23,20 @@ const router = express.Router();
 router.get("/", listContacts);
 
 router.get(`/:id`, checkValidId, getContactById);
-
 router.post("/", validatePostContact(contactSchema), addContact);
 
-router.delete("/:contactId", removeContact);
+router.delete("/:id", checkValidId, removeContact);
 
 router.put(
-  "/:contactId",
+  "/:id",
   checkValidId,
   validatePutContact(contactSchema),
   updateContact
 );
 
 router.patch(
-  "/:contactId/favorite",
+  "/:id/favorite",
+  checkValidId,
   validatePatchContact(contactPatchSchema),
   updateStatusContact
 );

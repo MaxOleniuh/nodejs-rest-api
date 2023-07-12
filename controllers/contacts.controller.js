@@ -14,6 +14,7 @@ const getContactById = async (req, res) => {
     const contact = await Contact.findById(id);
     if (!contact) {
       res.status(404).json({ message: "Not found" });
+      return;
     }
     if (id !== -1) {
       res.status(200).json(contact);
@@ -24,8 +25,8 @@ const getContactById = async (req, res) => {
 };
 const removeContact = async (req, res) => {
   try {
-    const { contactId } = req.params;
-    const removedContact = await Contact.findByIdAndRemove(contactId);
+    const { id } = req.params;
+    const removedContact = await Contact.findByIdAndRemove(id);
     if (!removedContact) {
       return res.status(404).json({ message: "Not found" });
     }
@@ -46,31 +47,36 @@ const addContact = async (req, res) => {
 };
 const updateContact = async (req, res) => {
   try {
-    const { contactId } = req.params;
-    const updatedContact = await Contact.findByIdAndUpdate(
-      contactId,
-      req.body,
-      {
-        new: true,
-      }
-    );
-    if (!req.body) {
-      return res.status(400).json({ message: "Missing fields" });
+    const { id } = req.params;
+    const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!updatedContact) {
+      res.status(404).json({ message: "Not found" });
+      return;
     }
-    res.status(200).json(updatedContact);
+    if (!req.body) {
+      res.status(400).json({ message: "Missing fields" });
+      return;
+    }
+    return res.status(200).json(updatedContact);
   } catch (error) {
-    return res.status(404).json({ message: "Not found" });
+    res.status(404).json({ message: "Not found" });
   }
 };
 const updateStatusContact = async (req, res) => {
   try {
-    const { contactId } = req.params;
+    const { id } = req.params;
     const { favorite } = req.body;
     const updatedContact = await Contact.findByIdAndUpdate(
-      contactId,
+      id,
       { favorite },
       { new: true }
     );
+    if (!updatedContact) {
+      res.status(404).json({ message: "Not found" });
+      return;
+    }
     if (!Object.hasOwnProperty.call(req.body, "favorite")) {
       return res.status(400).json({ message: "missing field favorite" });
     }
