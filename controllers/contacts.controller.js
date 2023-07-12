@@ -14,6 +14,7 @@ const getContactById = async (req, res) => {
     const contact = await Contact.findById(id);
     if (!contact) {
       res.status(404).json({ message: "Not found" });
+      return;
     }
     if (id !== -1) {
       res.status(200).json(contact);
@@ -54,12 +55,15 @@ const updateContact = async (req, res) => {
         new: true,
       }
     );
-    if (!req.body) {
-      return res.status(400).json({ message: "Missing fields" });
+    if (!updatedContact) {
+      res.status(404).json({ message: "Not found" });
     }
-    res.status(200).json(updatedContact);
+    if (!req.body) {
+      res.status(400).json({ message: "Missing fields" });
+    }
+    return res.status(200).json(updatedContact);
   } catch (error) {
-    return res.status(404).json({ message: "Not found" });
+    res.status(404).json({ message: "Not found" });
   }
 };
 const updateStatusContact = async (req, res) => {
