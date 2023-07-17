@@ -19,6 +19,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { password, email } = req.body;
   const user = await User.findOne({ email });
+  const { subscription } = user;
   const comparePassword = await bcrypt.compare(password, user.password);
   if (!user) {
     res.status(401).json({ message: "User doesn`t exist!" });
@@ -32,9 +33,25 @@ const login = async (req, res) => {
     id: user._id,
   };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
-  res.json(token);
+  res.status(200).json({ token, user: { email, subscription } });
 };
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+  return res.status(204);
+};
+
+const current = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  const { subscription } = user;
+  return res.status(200).json({ email, subscription });
+};
+
 module.exports = {
   register,
   login,
+  logout,
+  current,
 };

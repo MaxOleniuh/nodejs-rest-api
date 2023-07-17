@@ -22,7 +22,10 @@ const userSchemaMongoose = new Schema(
       type: Schema.Types.ObjectId,
       ref: "user",
     },
-    token: String,
+    token: {
+      type: String,
+      default: "",
+    },
   },
   {
     toJSON: {

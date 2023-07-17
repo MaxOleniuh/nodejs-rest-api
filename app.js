@@ -4,9 +4,11 @@ require("dotenv").config();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const PORT = 3000;
+const contactsRouter = require("./routes/api/contacts");
 const authRouter = require("./routes/users/register");
 const loginRouter = require("./routes/users/login");
-const contactsRouter = require("./routes/api/contacts");
+const logoutRouter = require("./routes/users/logout");
+const currentRouter = require("./routes/users/current");
 
 const app = express();
 
@@ -20,6 +22,8 @@ app.use(express.json());
 app.use("/api/contacts", contactsRouter);
 app.use("/users/register", authRouter);
 app.use("/users/login", loginRouter);
+app.use("/users/logout", logoutRouter);
+app.use("/users/current", currentRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
