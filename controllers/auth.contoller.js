@@ -19,16 +19,16 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { password, email } = req.body;
   const user = await User.findOne({ email });
-  const { subscription } = user;
-  const comparePassword = await bcrypt.compare(password, user.password);
   if (!user) {
     res.status(401).json({ message: "User doesn`t exist!" });
     return;
   }
+  const comparePassword = await bcrypt.compare(password, user.password);
   if (!comparePassword) {
     res.status(401).json({ message: "Email or password is wrong" });
     return;
   }
+  const { subscription } = user;
   const payload = {
     id: user._id,
   };
@@ -39,7 +39,7 @@ const login = async (req, res) => {
 const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
-  return res.status(204);
+  return res.status(204).send();
 };
 
 const current = async (req, res) => {
