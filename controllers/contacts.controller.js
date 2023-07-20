@@ -37,8 +37,11 @@ const removeContact = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
+  const { user } = req;
   try {
-    const newContact = await Contact.create(req.body);
+    const newContact = await (
+      await Contact.create({ ...req.body, id: user.id })
+    ).populate("id");
     res.status(201).json(newContact);
   } catch (error) {
     console.error("Error adding contact:", error);

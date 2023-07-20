@@ -17,11 +17,26 @@ const {
   contactPatchSchema,
 } = require("../../models/contactsSchema");
 const checkValidId = require("../../middleware/checkValidId");
+const authMiddleware = require("../../middleware/auth");
 
 const router = express.Router();
 
 router.get("/", listContacts);
 
+router.get(`/:id`, authMiddleware, checkValidId, getContactById);
+
+router.post(
+  "/",
+  authMiddleware,
+  validatePostContact(contactSchema),
+  addContact
+);
+
+router.delete("/:contactId", authMiddleware, removeContact);
+
+router.put(
+  "/:contactId",
+  authMiddleware,
 router.get(`/:id`, checkValidId, getContactById);
 router.post("/", validatePostContact(contactSchema), addContact);
 
@@ -29,12 +44,15 @@ router.delete("/:id", checkValidId, removeContact);
 
 router.put(
   "/:id",
+
   checkValidId,
   validatePutContact(contactSchema),
   updateContact
 );
 
 router.patch(
+  "/:contactId/favorite",
+  authMiddleware,
   "/:id/favorite",
   checkValidId,
   validatePatchContact(contactPatchSchema),
