@@ -21,6 +21,10 @@ const contactSchemaMongoose = new Schema(
       ref: "user",
       required: true,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { toJSON: { versionKey: false } }
 );
