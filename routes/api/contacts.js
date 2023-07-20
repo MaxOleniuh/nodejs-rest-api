@@ -34,12 +34,9 @@ router.post(
 
 router.delete("/:contactId", authMiddleware, removeContact);
 
-router.put(
-  "/:contactId",
-  authMiddleware,
+router.put("/:contactId", authMiddleware);
 router.get(`/:id`, checkValidId, getContactById);
 router.post("/", validatePostContact(contactSchema), addContact);
-
 router.delete("/:id", checkValidId, removeContact);
 
 router.put(
