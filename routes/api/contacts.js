@@ -37,6 +37,14 @@ router.delete("/:contactId", authMiddleware, removeContact);
 router.put(
   "/:contactId",
   authMiddleware,
+router.get(`/:id`, checkValidId, getContactById);
+router.post("/", validatePostContact(contactSchema), addContact);
+
+router.delete("/:id", checkValidId, removeContact);
+
+router.put(
+  "/:id",
+
   checkValidId,
   validatePutContact(contactSchema),
   updateContact
@@ -45,6 +53,8 @@ router.put(
 router.patch(
   "/:contactId/favorite",
   authMiddleware,
+  "/:id/favorite",
+  checkValidId,
   validatePatchContact(contactPatchSchema),
   updateStatusContact
 );
