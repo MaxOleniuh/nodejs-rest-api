@@ -31,6 +31,7 @@ const userSchemaMongoose = new Schema(
     toJSON: {
       versionKey: false,
     },
+    avatarURL: String,
   }
 );
 
