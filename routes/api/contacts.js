@@ -32,11 +32,9 @@ router.post(
   addContact
 );
 
-router.delete("/:contactId", authMiddleware, removeContact);
+router.delete("/:id", authMiddleware, removeContact);
 
-router.put(
-  "/:contactId",
-  authMiddleware,
+router.put("/:id", authMiddleware);
 router.get(`/:id`, checkValidId, getContactById);
 router.post("/", validatePostContact(contactSchema), addContact);
 
@@ -44,16 +42,14 @@ router.delete("/:id", checkValidId, removeContact);
 
 router.put(
   "/:id",
-
   checkValidId,
   validatePutContact(contactSchema),
   updateContact
 );
 
 router.patch(
-  "/:contactId/favorite",
-  authMiddleware,
   "/:id/favorite",
+  authMiddleware,
   checkValidId,
   validatePatchContact(contactPatchSchema),
   updateStatusContact
