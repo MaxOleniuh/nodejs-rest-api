@@ -21,7 +21,7 @@ const authMiddleware = require("../../middleware/auth");
 
 const router = express.Router();
 
-router.get("/", listContacts);
+router.get("/", authMiddleware, listContacts);
 
 router.get(`/:id`, authMiddleware, checkValidId, getContactById);
 
