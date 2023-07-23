@@ -26,12 +26,14 @@ const userSchemaMongoose = new Schema(
       type: String,
       default: "",
     },
+    avatarURL: {
+      type: String,
+    },
   },
   {
     toJSON: {
       versionKey: false,
     },
-    avatarURL: String,
   }
 );
 
