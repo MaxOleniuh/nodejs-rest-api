@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { SECRET_KEY } = process.env;
 const gravatar = require("gravatar");
+const Jimp = require("jimp");
 const path = require("path");
 const fs = require("fs/promises");
 
@@ -67,7 +68,13 @@ const updateAvatar = async (req, res) => {
   const extension = originalname.split(".").pop();
   const filename = `${_id}.${extension}`;
   const resultUpload = path.join(avatarsDir, filename);
-  await fs.rename(tempUpload, resultUpload);
+  try {
+    const image = await Jimp.read(tempUpload);
+    await image.resize(250, 250).write(resultUpload);
+    await fs.unlink(tempUpload);
+  } catch (error) {
+    console.error("Error resizing avatar:", error);
+  }
   const avatarURL = path.join("avatars", filename);
   await User.findByIdAndUpdate(_id, { avatar_url: avatarURL });
   return res.status(200).json({ avatarURL: avatarURL });
