@@ -1,7 +1,8 @@
 const { Contact } = require("../models/contact");
 const listContacts = async (req, res) => {
   try {
-    const contacts = await Contact.find();
+    const authenticatedUserId = req.user.id;
+    const contacts = await Contact.find({ owner: authenticatedUserId });
     res.json(contacts);
   } catch (error) {
     console.error("Error retrieving contacts:", error);
@@ -39,9 +40,10 @@ const removeContact = async (req, res) => {
 const addContact = async (req, res) => {
   const { user } = req;
   try {
-    const newContact = await (
-      await Contact.create({ ...req.body, id: user.id })
-    ).populate("id");
+    const newContact = await await Contact.create({
+      ...req.body,
+      owner: user.id,
+    });
     res.status(201).json(newContact);
   } catch (error) {
     console.error("Error adding contact:", error);
