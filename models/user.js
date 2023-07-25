@@ -26,8 +26,9 @@ const userSchemaMongoose = new Schema(
       type: String,
       default: "",
     },
-    avatarURL: {
+    avatar_url: {
       type: String,
+      default: null,
     },
   },
   {
