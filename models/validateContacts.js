@@ -68,7 +68,6 @@ const validatePatchContact = (schema) => {
   };
   return middleware;
 };
-
 module.exports = {
   validatePostContact,
   validatePutContact,
