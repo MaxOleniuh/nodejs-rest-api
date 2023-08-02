@@ -28,7 +28,7 @@ const register = async (req, res) => {
     const mail = {
       to: email,
       subject: "Verify your email",
-      html: `<a href="https://localhost:3000/auth/verify/${verificationCode}">Here</a>`,
+      html: `<a href="http://localhost:3000/users/verify/${verificationCode}">Here</a>`,
     };
     await sendEmail(mail);
     res.status(201).json({ user: { email, subscription } });
@@ -113,13 +113,16 @@ const resendVerifyEmail = async (req, res) => {
     if (!user.email) {
       res.status(400).json({ message: "missing required field email" });
     }
+    await User.findByIdAndUpdate(user._id, {
+      verify: true,
+    });
     if (user.verify) {
       res.status(400).json({ message: "Verification has already been passed" });
     }
     const mail = {
       to: email,
       subject: "Verify your email",
-      html: `<a href="https://localhost:3000/auth/verify/${user.verificationToken}">Follow Here</a>`,
+      html: `<a href="http://localhost:3000/users/verify/${user.verificationToken}">Follow Here</a>`,
     };
     await sendEmail(mail);
     res.status(201).json({ message: "Verify email has been send" });
